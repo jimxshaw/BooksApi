@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
+using BooksApi.Services;
 
 namespace BooksApi
 {
@@ -31,6 +32,8 @@ namespace BooksApi
 
             var connectionString = Configuration["ConnectionStrings:BooksDbConnectionString"];
             services.AddDbContext<BooksContext>(options => options.UseMySql(connectionString));
+
+            services.AddScoped<IBooksRepository, BooksRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
