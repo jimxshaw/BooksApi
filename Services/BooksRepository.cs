@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BooksApi.Contexts;
 using BooksApi.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace BooksApi.Services
 {
@@ -16,24 +17,28 @@ namespace BooksApi.Services
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        IEnumerable<Book> IBooksRepository.GetBooks()
+        public IEnumerable<Book> GetBooks()
         {
             throw new NotImplementedException();
         }
 
-        Book IBooksRepository.GetBook(Guid id)
+        public Book GetBook(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        Task<IEnumerable<Book>> IBooksRepository.GetBooksAsync()
+        public async Task<IEnumerable<Book>> GetBooksAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Books
+                                 .Include(b => b.Author)
+                                 .ToListAsync();
         }
 
-        Task<Book> IBooksRepository.GetBookAsync(Guid id)
+        public async Task<Book> GetBookAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.Books
+                                 .Include(b => b.Author)
+                                 .FirstOrDefaultAsync(b => b.Id == id);
         }
 
         public void Dispose()
